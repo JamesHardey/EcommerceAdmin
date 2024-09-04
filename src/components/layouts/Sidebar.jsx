@@ -1,50 +1,70 @@
+// Sidebar.js
 import React, { useState } from 'react';
 import { 
     FaHome, FaShoppingCart, FaList, FaCube, FaClipboardList, FaUser, FaUserCog, FaImages, FaChevronDown, FaChevronRight, 
-    FaPlus, FaTags, FaBoxOpen, FaTruck, FaUserPlus, FaUserShield 
 } from 'react-icons/fa';
 import { MdOutlineDashboard } from "react-icons/md";
 import { AiOutlineMenuUnfold } from "react-icons/ai";
+import { Link } from 'react-router-dom';
 
 const menuItems = [
     { 
         icon: MdOutlineDashboard, 
         label: 'Dashboard', 
-        subItems: ['Home 01'] 
+        subItems: [{ name: 'Home 01', path: '/dashboard' }] 
     },
     { 
         icon: FaShoppingCart, 
         label: 'Ecommerce', 
-        subItems: ['Add Product', 'Product List'] 
+        subItems: [
+            { name: 'Add Product', path: '/ecommerce/add-product' }, 
+            { name: 'Product List', path: '/ecommerce/product-list' }
+        ] 
     },
     { 
         icon: FaList, 
         label: 'Category', 
-        subItems: ['Category List', 'New Category'] 
+        subItems: [
+            { name: 'Category List', path: '/category/list' }, 
+            { name: 'New Category', path: '/category/new' }
+        ] 
     },
     { 
         icon: FaCube, 
         label: 'Attributes', 
-        subItems: ['Attributes', 'Add Attributes'] 
+        subItems: [
+            { name: 'Attributes', path: '/attributes' }, 
+            { name: 'Add Attributes', path: '/attributes/add' }
+        ] 
     },
     { 
         icon: FaClipboardList, 
         label: 'Order', 
-        subItems: ['Order List', 'Order Tracking'] 
+        subItems: [
+            { name: 'Order List', path: '/orders/list' }, 
+            { name: 'Order Tracking', path: '/orders/tracking' }
+        ] 
     },
     { 
         icon: FaUser, 
         label: 'Users', 
-        subItems: ['All Users', 'Add New User'] 
+        subItems: [
+            { name: 'All Users', path: '/users' }, 
+            { name: 'Add New User', path: '/users/new' }
+        ] 
     },
     { 
         icon: FaUserCog, 
         label: 'Roles', 
-        subItems: ['All Roles', 'Create Role'] 
+        subItems: [
+            { name: 'All Roles', path: '/roles' }, 
+            { name: 'Create Role', path: '/roles/create' }
+        ] 
     },
     { 
         icon: FaImages, 
-        label: 'Gallery' 
+        label: 'Gallery', 
+        subItems: [{ name: 'Gallery', path: '/gallery' }]
     },
 ];
 
@@ -98,13 +118,14 @@ function Sidebar({ openSidebar }) {
                         {item.subItems && expandedItems[index] && (
                             <div className="ml-6 mt-2">
                                 {item.subItems.map((subItem, subIndex) => (
-                                    <div 
+                                    <Link
+                                        to={subItem.path} 
                                         key={subIndex} 
-                                        className={`py-1 text-sm ${activeItem === `${index}-${subIndex}` ? 'text-blue-500' : 'text-gray-600'} hover:text-blue-500 hover:bg-blue-50 cursor-pointer transition-colors`}
+                                        className={`block py-1 text-sm ${activeItem === `${index}-${subIndex}` ? 'text-blue-500' : 'text-gray-600'} hover:text-blue-500 hover:bg-blue-50 cursor-pointer transition-colors`}
                                         onClick={() => setActiveItem(`${index}-${subIndex}`)}
                                     >
-                                        {subItem}
-                                    </div>
+                                        {subItem.name}
+                                    </Link>
                                 ))}
                             </div>
                         )}
