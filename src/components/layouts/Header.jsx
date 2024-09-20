@@ -15,12 +15,12 @@ function Header({ isOpen, openSidebar }) {
     }
 
     return (
-        <header className={`${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} shadow-md`}>
+        <header className={`${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800' } shadow-md`}>
             <div className="w-full px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     {!isOpen &&
                         <button
-                            className="text-gray-400 hover:text-gray-600 mr-4"
+                            className="text-gray-400 hover:text-gray-600 mr-4 font-poppins"
                             onClick={toggleView}
                         >
                             <AiOutlineMenuFold size={24} />
@@ -29,7 +29,7 @@ function Header({ isOpen, openSidebar }) {
                     <div className="flex items-center flex-1">
                         <div className="relative">
                             <input
-                                className={`rounded-full pl-10 pr-4 py-2 focus:outline-none focus:ring-gray-400 w-[600px] ${
+                                className={`rounded-full pl-10 pr-4 py-2 focus:outline-none focus:ring-gray-400 w-[600px] font-poppins ${
                                     isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-900'
                                 }`}
                                 type="text"
@@ -39,12 +39,12 @@ function Header({ isOpen, openSidebar }) {
                         </div>
                     </div>
                     <div className="flex items-center">
-                        <button onClick={toggleTheme} className="mr-4">
+                        <button onClick={toggleTheme} className="mr-4 font-poppins">
                             {isDarkMode ? <FaSun className="text-yellow-400" /> : <FaMoon className="text-gray-400" />}
                         </button>
                         <FaBell className="mx-4 text-gray-400" />
                         <FaShoppingCart className="mx-4 text-gray-400" />
-                        <div className="flex items-center ml-4">
+                        <div className="flex items-center ml-4 font-poppins">
                             <Avatar name={'James'} />
                             <span className="ml-2">Kristin Watson</span>
                         </div>

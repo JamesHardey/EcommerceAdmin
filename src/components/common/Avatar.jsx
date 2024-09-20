@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Avatar({ name, src, size = 40 }) {
+function Avatar({ name, src, size = 7 }) {
     // Get the initial from the first name
     const initial = name ? name.charAt(0).toUpperCase() : '';
 
@@ -12,7 +12,7 @@ function Avatar({ name, src, size = 40 }) {
             className={`flex justify-center items-center rounded-full
                  bg-blue-500 text-white font-bold 
                  uppercase overflow-hidden ${sizeClass}`}
-            style={{ fontSize: size * 0.4 }}
+            style={{ fontSize: size * 0.3 }}
         >
             {src ? (
                 <img

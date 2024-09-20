@@ -1,190 +1,254 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    CardHeader,
-    Divider,
-    Grid,
-    TextField,
-    MenuItem,
-} from '@mui/material';
+import React, { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { Text } from "../components/common/Text";
+import FormInput from "../components/common/FormInput";
+import Button from "../components/common/Button";
 
-const validationSchema = yup.object().shape({
-    productName: yup.string().required('Product name is required'),
-    category: yup.string().required('Category is required'),
-    price: yup.number().positive('Price must be a positive number').required('Price is required'),
-    quantity: yup.number().positive('Quantity must be a positive number').required('Quantity is required'),
-    description: yup.string().required('Description is required'),
-    image: yup.mixed().required('Product image is required'),
-    tags: yup.array().of(yup.string()).min(1, 'At least one tag is required'),
-    status: yup.string().oneOf(['active', 'inactive']).required('Status is required'),
-    featured: yup.boolean(),
-    discount: yup.number().min(0, 'Discount must be a positive number'),
+const schema = yup.object().shape({
+  name: yup
+    .string()
+    .required("Product name is required")
+    .min(3, "Product name must be at least 3 characters"),
+  description: yup
+    .string()
+    .required("Description is required")
+    .min(10, "Description must be at least 10 characters"),
+  price: yup
+    .number()
+    .required("Price is required")
+    .positive("Price must be positive")
+    .min(0.01, "Minimum price is 0.01"),
+  category: yup.string().required("Category is required"),
+  stock: yup
+    .number()
+    .required("Stock is required")
+    .integer("Stock must be an integer")
+    .min(0, "Stock cannot be negative"),
+  image: yup.mixed().required("Product image is required"),
 });
 
+const categories = [
+  "Electronics",
+  "Clothing",
+  "Home & Garden",
+  "Sports & Outdoors",
+  "Books",
+  "Toys & Games",
+  "Health & Beauty",
+  "Automotive",
+  "Food & Beverages",
+];
+
 const AddProduct = () => {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm({
-        resolver: yupResolver(validationSchema),
-    });
+  const [previewImage, setPreviewImage] = useState(null);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      name: "",
+      description: "",
+      price: "",
+      category: "",
+      stock: "",
+      image: null,
+    },
+  });
 
-    const onSubmit = (data) => {
-        console.log(data);
-        // Add your form submission logic here
-    };
+  const onSubmit = (data) => {
+    console.log(data);
+    // Here you would typically send the data to your backend
+  };
 
-    return (
-        <Card>
-            <CardHeader title="Add New Product" />
-            <Divider />
-            <CardContent>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <Grid container spacing={3}>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                fullWidth
-                                label="Product Name"
-                                name="productName"
-                                variant="outlined"
-                                {...register('productName')}
-                                error={!!errors.productName}
-                                helperText={errors.productName?.message}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                fullWidth
-                                label="Category"
-                                name="category"
-                                select
-                                variant="outlined"
-                                {...register('category')}
-                                error={!!errors.category}
-                                helperText={errors.category?.message}
-                            >
-                                <MenuItem value="">Select Category</MenuItem>
-                                <MenuItem value="electronics">Electronics</MenuItem>
-                                <MenuItem value="fashion">Fashion</MenuItem>
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                fullWidth
-                                label="Price"
-                                name="price"
-                                type="number"
-                                variant="outlined"
-                                {...register('price')}
-                                error={!!errors.price}
-                                helperText={errors.price?.message}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                fullWidth
-                                label="Quantity"
-                                name="quantity"
-                                type="number"
-                                variant="outlined"
-                                {...register('quantity')}
-                                error={!!errors.quantity}
-                                helperText={errors.quantity?.message}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Description"
-                                name="description"
-                                multiline
-                                rows={4}
-                                variant="outlined"
-                                {...register('description')}
-                                error={!!errors.description}
-                                helperText={errors.description?.message}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <p className='text-gray-500 mb-2'>Product Image</p>
-                            <TextField
-                                fullWidth
-                                // label="Product Image"
-                                name="image"
-                                type="file"
-                                variant="outlined"
-                                {...register('image')}
-                                error={!!errors.image}
-                                helperText={errors.image?.message}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Tags"
-                                name="tags"
-                                placeholder="Comma separated tags"
-                                variant="outlined"
-                                {...register('tags')}
-                                error={!!errors.tags}
-                                helperText={errors.tags?.message}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                fullWidth
-                                label="Status"
-                                name="status"
-                                select
-                                variant="outlined"
-                                {...register('status')}
-                                error={!!errors.status}
-                                helperText={errors.status?.message}
-                            >
-                                <MenuItem value="active">Active</MenuItem>
-                                <MenuItem value="inactive">Inactive</MenuItem>
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Box display="flex" alignItems="center">
-                                <TextField
-                                    fullWidth
-                                    label="Discount"
-                                    name="discount"
-                                    type="number"
-                                    variant="outlined"
-                                    {...register('discount')}
-                                    error={!!errors.discount}
-                                    helperText={errors.discount?.message}
-                                />
-                                {/* <Divider orientation="vertical" flexItem sx={{ mx: 2 }} /> */}
-                                {/* <Box display="flex" alignItems="center">
-                                    <input
-                                        type="checkbox"
-                                        {...register('featured')}
-                                        style={{ marginRight: '8px' }}
-                                    />
-                                    <label>Featured Product</label>
-                                </Box> */}
-                            </Box>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button type="submit" variant="contained" color="primary" fullWidth>
-                                Add Product
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </form>
-            </CardContent>
-        </Card>
-    );
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  return (
+    <div className="w-full h-full p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+      <Text
+        as="h1"
+        size="3xl"
+        weight="bold"
+        className="mb-8 text-center text-gray-800 dark:text-white"
+      >
+        Add New Product
+      </Text>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-6">
+            <Controller
+              name="name"
+              control={control}
+              render={({ field }) => (
+                <FormInput
+                  label="Product Name"
+                  {...field}
+                  errorMessage={errors.name?.message}
+                  className="mb-4"
+                  inputClassName="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              )}
+            />
+
+            <Controller
+              name="price"
+              control={control}
+              render={({ field }) => (
+                <FormInput
+                  label="Price"
+                  {...field}
+                  type="number"
+                  step="0.01"
+                  errorMessage={errors.price?.message}
+                  inputClassName="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              )}
+            />
+
+            <Controller
+              name="stock"
+              control={control}
+              render={({ field }) => (
+                <FormInput
+                  label="Stock"
+                  {...field}
+                  type="number"
+                  errorMessage={errors.stock?.message}
+                  inputClassName="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              )}
+            />
+
+            <Controller
+              name="category"
+              control={control}
+              render={({ field }) => (
+                <div className="mb-4">
+                  <label
+                    htmlFor="category"
+                    className="block font-semibold font-poppins text-gray-700 dark:text-gray-200 mb-1"
+                  >
+                    Category
+                  </label>
+                  <select
+                    {...field}
+                    id="category"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  >
+                    <option value="">Select a category</option>
+                    {categories.map((category) => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.category && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.category.message}
+                    </p>
+                  )}
+                </div>
+              )}
+            />
+
+            <Controller
+              name="description"
+              control={control}
+              render={({ field }) => (
+                <div className="mb-4">
+                  <label
+                    htmlFor="description"
+                    className="block text-gray-700 dark:text-gray-200 mb-1 font-poppins font-semibold"
+                  >
+                    Description
+                  </label>
+                  <textarea
+                    {...field}
+                    id="description"
+                    rows="4"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  ></textarea>
+                  {errors.description && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.description.message}
+                    </p>
+                  )}
+                </div>
+              )}
+            />
+          </div>
+
+          <div className="space-y-6">
+            <Controller
+              name="image"
+              control={control}
+              render={({ field: { onChange, value, ...field } }) => (
+                <div className="mb-4">
+                  <label
+                    htmlFor="image"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1"
+                  >
+                    Product Image
+                  </label>
+                  <input
+                    {...field}
+                    id="image"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      onChange(e.target.files[0]);
+                      handleImageChange(e);
+                    }}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  />
+                  {errors.image && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.image.message}
+                    </p>
+                  )}
+                </div>
+              )}
+            />
+
+            {previewImage && (
+              <div className="mt-4">
+                <Text as="h3" size="lg" weight="semibold" className="mb-2">
+                  Image Preview
+                </Text>
+                <img
+                  src={previewImage}
+                  alt="Preview"
+                  className="w-40 rounded-lg shadow-md p-3"
+                />
+              </div>
+            )}
+          </div>
+        </div>
+
+        <Button
+          type="submit"
+          variant="primary"
+          size="medium"
+          className="mt-8"
+        >
+          Add Product
+        </Button>
+      </form>
+    </div>
+  );
 };
 
 export default AddProduct;

@@ -86,10 +86,10 @@ function Sidebar({ openSidebar }) {
     return (
         <aside className="w-64 bg-white shadow-md">
             <div className="p-4 flex justify-between items-center">
-                <h1 className="text-2xl font-bold">F7Team Admin</h1>
+                <h1 className="text-2xl font-bold font-poppins">F7Team Admin</h1>
                 <button 
                     onClick={toggleView} 
-                    className="text-gray-600 hover:text-gray-800 transition-colors"
+                    className="text-gray-600 hover:text-gray-800 transition-colors font-poppins"
                 >
                     <AiOutlineMenuUnfold size={24} />
                 </button>
@@ -109,10 +109,10 @@ function Sidebar({ openSidebar }) {
                         >
                             <div className="flex items-center">
                                 <item.icon className={`mr-2 ${activeItem === index ? 'text-blue-500' : 'text-gray-500'}`} />
-                                <span className={activeItem === index ? 'text-blue-500' : 'text-gray-700'}>{item.label}</span>
+                                <span className={activeItem === index ? 'text-blue-500 font-poppins' : 'text-gray-700 font-poppins'}>{item.label}</span>
                             </div>
                             {item.subItems && (
-                                expandedItems[index] ? <FaChevronDown className="text-gray-500" /> : <FaChevronRight className="text-gray-500" />
+                                expandedItems[index] ? <FaChevronDown className="text-gray-500 font-poppins" /> : <FaChevronRight className="text-gray-500 font-poppins" />
                             )}
                         </div>
                         {item.subItems && expandedItems[index] && (
@@ -121,7 +121,7 @@ function Sidebar({ openSidebar }) {
                                     <Link
                                         to={subItem.path} 
                                         key={subIndex} 
-                                        className={`block py-1 text-sm ${activeItem === `${index}-${subIndex}` ? 'text-blue-500' : 'text-gray-600'} hover:text-blue-500 hover:bg-blue-50 cursor-pointer transition-colors`}
+                                        className={`block py-1 text-sm ${activeItem === `${index}-${subIndex}` ? 'text-blue-500 font-poppins' : 'text-gray-600 font-poppins'} hover:text-blue-500 hover:bg-blue-50 cursor-pointer transition-colors`}
                                         onClick={() => setActiveItem(`${index}-${subIndex}`)}
                                     >
                                         {subItem.name}
